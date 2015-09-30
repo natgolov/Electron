@@ -10,6 +10,10 @@
 
 #include "brightray/common/content_client.h"
 
+namespace component_updater {
+class ComponentUpdateService;
+}
+
 namespace atom {
 
 class AtomContentClient : public brightray::ContentClient {
@@ -26,7 +30,13 @@ class AtomContentClient : public brightray::ContentClient {
   void AddPepperPlugins(
       std::vector<content::PepperPluginInfo>* plugins) override;
 
+  component_updater::ComponentUpdateService* component_updater();
+  void RegisterComponentsForUpdate();
+
  private:
+  // Initially only for Widevine components.
+  scoped_ptr<component_updater::ComponentUpdateService> component_updater_;
+
   DISALLOW_COPY_AND_ASSIGN(AtomContentClient);
 };
 

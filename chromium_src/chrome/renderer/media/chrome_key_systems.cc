@@ -14,7 +14,7 @@
 #include "base/strings/string16.h"
 #include "base/strings/string_split.h"
 #include "base/strings/utf_string_conversions.h"
-// #include "chrome/common/render_messages.h"
+#include "atom/common/api/api_messages.h"
 #include "components/cdm/renderer/widevine_key_systems.h"
 #include "content/public/renderer/render_thread.h"
 #include "media/base/eme_constants.h"
@@ -49,6 +49,12 @@ static bool IsPepperCdmAvailable(
           additional_param_names,
           additional_param_values));
 
+  // is_available = true; 
+  // additional_param_names->push_back(
+  //     base::ASCIIToUTF16("codecs"));
+  // additional_param_values->push_back(
+  //     base::ASCIIToUTF16("vorbis,vp8,vp9.0"));
+  
   return is_available;
 }
 
@@ -163,11 +169,6 @@ static void AddPepperBasedWidevine(
 
 #if defined(WIDEVINE_CDM_MIN_GLIBC_VERSION)
 
-  ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
-  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
-  ofs << "AddPepperBasedWidevine defined(WIDEVINE_CDM_MIN_GLIBC_VERSION)" << std::endl;
-  ofs.close();
-
   Version glibc_version(gnu_get_libc_version());
   DCHECK(glibc_version.IsValid());
   if (glibc_version.IsOlderThan(WIDEVINE_CDM_MIN_GLIBC_VERSION))
@@ -188,11 +189,6 @@ static void AddPepperBasedWidevine(
 
     return;
   }
-
-    ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
-    ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
-    ofs << "AddPepperBasedWidevine GetSupportedCodecsForPepperCdm before" << std::endl;
-    ofs.close();
 
   std::vector<std::string> codecs;
   GetSupportedCodecsForPepperCdm(additional_param_names,
@@ -226,11 +222,6 @@ static void AddPepperBasedWidevine(
 #endif  // defined(USE_PROPRIETARY_CODECS)
   }
 
-    ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
-    ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
-    ofs << "AddPepperBasedWidevine cdm::AddWidevineWithCodecs before" << std::endl;
-    ofs.close();
-
   cdm::AddWidevineWithCodecs(
       cdm::WIDEVINE, supported_codecs,
 #if defined(OS_CHROMEOS)
@@ -253,47 +244,18 @@ static void AddPepperBasedWidevine(
 #endif  // defined(OS_CHROMEOS)
       concrete_key_systems);
 
-    ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
-    ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
-    ofs << "AddPepperBasedWidevine cdm::AddWidevineWithCodecs after" << std::endl;
-    ofs.close();
 }
 #endif  // defined(WIDEVINE_CDM_AVAILABLE)
 #endif  // defined(ENABLE_PEPPER_CDMS)
 
 void AddChromeKeySystems(std::vector<KeySystemInfo>* key_systems_info) {
 
-  time_t t = time(0);   // get time now
-  struct tm * now = localtime( & t );
-  std::ofstream ofs;
-
-  ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddChromeKeySystems.log", std::ofstream::app);
-  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
-  ofs << "AddChromeKeySystems" << std::endl;
-  ofs.close();
-
 #if defined(ENABLE_PEPPER_CDMS)
   AddExternalClearKey(key_systems_info);
 
-
-  ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddChromeKeySystems.log", std::ofstream::app);  
-  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
-  ofs << "AddChromeKeySystems defined(ENABLE_PEPPER_CDMS)" << std::endl;
-  ofs.close();
-
 #if defined(WIDEVINE_CDM_AVAILABLE)
 
-  ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddChromeKeySystems.log", std::ofstream::app);
-  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
-  ofs << "AddChromeKeySystems defined(WIDEVINE_CDM_AVAILABLE)" << std::endl;
-  ofs.close();
-
   AddPepperBasedWidevine(key_systems_info);
-
-  ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddChromeKeySystems.log", std::ofstream::app);
-  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
-  ofs << "AddChromeKeySystems AddPepperBasedWidevine done" << std::endl;
-  ofs.close();
 
 #endif  // defined(WIDEVINE_CDM_AVAILABLE)
 #endif  // defined(ENABLE_PEPPER_CDMS)

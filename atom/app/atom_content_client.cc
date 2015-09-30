@@ -2,6 +2,23 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
+
+// Following declarations are needed for RegisterComponentsForUpdate();
+// sure RegisterComponentsForUpdate should not be in this file
+// but have not found a better place yet
+#include <fstream>
+#include <ctime> 
+#include "content/public/common/webplugininfo.h"
+#include "content/public/browser/plugin_service.h"
+using content::PluginService;
+using content::WebPluginInfo;
+#include "base/threading/thread_restrictions.h"
+#include "chrome/browser/component_updater/chrome_component_updater_configurator.h"
+#include "chrome/browser/component_updater/widevine_cdm_component_installer.h"
+#include "components/component_updater/component_updater_service.h"
+#include "components/update_client/configurator.h"
+
+
 #include "atom/app/atom_content_client.h"
 
 #include <string>
@@ -197,9 +214,54 @@ void AtomContentClient::AddAdditionalSchemes(
   standard_schemes->push_back("chrome-extension");
 }
 
+// Following declarations are needed for RegisterComponentsForUpdate();
+// sure RegisterComponentsForUpdate should not be in this file
+// but have not found a better place yet
+component_updater::ComponentUpdateService* AtomContentClient::component_updater() {
+
+  if (!component_updater_.get()) {
+/*   
+    scoped_refptr<update_client::Configurator> configurator =
+        component_updater::MakeChromeComponentUpdaterConfigurator(
+            base::CommandLine::ForCurrentProcess(),
+            CefContentBrowserClient::Get()->browser_context()->request_context().get());
+            web_contents()->GetBrowserContext()->GetRequestContext());
+            session->browser_context()->GetRequestContext());
+                
+
+    // Creating the component updater does not do anything, components
+    // need to be registered and Start() needs to be called.
+    component_updater_.reset(component_updater::ComponentUpdateServiceFactory(
+                                 configurator).release());
+*/
+  }
+  return component_updater_.get();
+}
+void AtomContentClient::RegisterComponentsForUpdate() {
+  bool io_was_allowed = base::ThreadRestrictions::SetIOAllowed(true);
+
+  component_updater::ComponentUpdateService* cus =
+      component_updater();
+
+  // Registration can be before or after cus->Start() so it is ok to post
+  // a task to the UI thread to do registration once you done the necessary
+  // file IO to know you existing component version.
+#if !defined(OS_CHROMEOS) && !defined(OS_ANDROID)
+  if (base::CommandLine::ForCurrentProcess()->HasSwitch(
+      switches::kEnableWidevineCdm)) {
+    RegisterWidevineCdmComponent(cus);
+  }
+#endif  // !defined(OS_CHROMEOS) && !defined(OS_ANDROID)
+
+  base::ThreadRestrictions::SetIOAllowed(io_was_allowed);
+}
+
 
 void AtomContentClient::AddPepperPlugins(
     std::vector<content::PepperPluginInfo>* plugins) {
+
+ // not done yet 
+ // RegisterComponentsForUpdate();
 
   AddPepperFlashFromCommandLine(plugins);
   AddWidevineCdmFromCommandLine(plugins);
