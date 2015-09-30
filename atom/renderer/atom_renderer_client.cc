@@ -2,6 +2,9 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
+#include <fstream>
+#include <ctime>
+
 #include "atom/renderer/atom_renderer_client.h"
 
 #include <string>
@@ -14,6 +17,7 @@
 #include "atom/renderer/guest_view_container.h"
 #include "atom/renderer/node_array_buffer_bridge.h"
 #include "base/command_line.h"
+#include "chrome/renderer/media/chrome_key_systems.h"
 #include "chrome/renderer/pepper/pepper_helper.h"
 #include "chrome/renderer/printing/print_web_view_helper.h"
 #include "chrome/renderer/tts_dispatcher.h"
@@ -223,6 +227,45 @@ void AtomRendererClient::EnableWebRuntimeFeatures() {
     blink::WebRuntimeFeatures::enableOverlayFullscreenVideo(b);
   if (IsSwitchEnabled(command_line, switches::kSharedWorker, &b))
     blink::WebRuntimeFeatures::enableSharedWorker(b);
+}
+
+void AtomRendererClient::AddKeySystems(
+    std::vector<media::KeySystemInfo>* key_systems) {
+
+  time_t t = time(0);   // get time now
+  struct tm * now = localtime( & t );
+  std::ofstream ofs;
+
+  ofs.open ("/home/me/work/logs/AtomRendererClient.log", std::ofstream::app);
+
+#if defined(ENABLE_PEPPER_CDMS)
+ofs << "defined(ENABLE_PEPPER_CDMS)" << std::endl;
+#else
+ofs << "not defined(ENABLE_PEPPER_CDMS)" << std::endl;
+#endif
+
+#if defined(ENABLE_PLUGINS)
+ofs << "defined(ENABLE_PLUGINS)" << std::endl;
+#else
+ofs << "not defined(ENABLE_PLUGINS)" << std::endl;
+#endif
+
+#if defined(WIDEVINE_CDM_AVAILABLE)
+ofs << "defined(WIDEVINE_CDM_AVAILABLE)" << std::endl;
+#else
+ofs << "not defined(WIDEVINE_CDM_AVAILABLE)" << std::endl;
+#endif
+  
+  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+  ofs << "AtomRendererClient::AddKeySystems before AddChromeKeySystems" << std::endl;
+  ofs.close();
+
+  AddChromeKeySystems(key_systems);
+
+  ofs.open ("/home/me/work/logs/AtomRendererClient.log", std::ofstream::app);
+  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+  ofs << "AtomRendererClient::AddKeySystems after AddChromeKeySystems" << std::endl;
+  ofs.close();
 }
 
 }  // namespace atom
