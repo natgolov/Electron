@@ -17,7 +17,7 @@
 #include "build/build_config.h"
 #include "components/update_client/component_patcher_operation.h"
 #include "chrome/browser/component_updater/component_updater_url_constants.h"
-#include "chrome/browser/update_client/chrome_update_query_params_delegate.h"
+// #include "chrome/browser/update_client/chrome_update_query_params_delegate.h"
 #include "components/component_updater/component_updater_switches.h"
 #include "components/update_client/configurator.h"
 #include "content/public/browser/browser_thread.h"

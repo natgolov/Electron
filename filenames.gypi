@@ -392,8 +392,6 @@
       'chromium_src/chrome/browser/ui/views/color_chooser_aura.h',
       'chromium_src/chrome/browser/ui/views/frame/global_menu_bar_registrar_x11.cc',
       'chromium_src/chrome/browser/ui/views/frame/global_menu_bar_registrar_x11.h',
-      'chromium_src/chrome/browser/update_client/chrome_update_query_params_delegate.h',
-      'chromium_src/chrome/browser/update_client/chrome_update_query_params_delegate.cc',
       'chromium_src/chrome/common/chrome_constants.cc',
       'chromium_src/chrome/common/chrome_constants.h',
       'chromium_src/chrome/common/chrome_paths.cc',
