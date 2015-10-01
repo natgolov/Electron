@@ -93,6 +93,9 @@ content::PepperPluginInfo CreateWidevineCdmInfo(const base::FilePath& path,
 
   content::PepperPluginInfo widevine_cdm;
 
+#if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS) && \
+    !defined(WIDEVINE_CDM_IS_COMPONENT)
+
   widevine_cdm.is_out_of_process = true;
   widevine_cdm.path = path;
   widevine_cdm.name = kWidevineCdmDisplayName;
@@ -134,6 +137,9 @@ content::PepperPluginInfo CreateWidevineCdmInfo(const base::FilePath& path,
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "additional_param_values = " << codec_string << std::endl;
   ofs.close();
+
+  #endif  // defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS) &&
+        // !defined(WIDEVINE_CDM_IS_COMPONENT)
 
   return widevine_cdm;
 }
