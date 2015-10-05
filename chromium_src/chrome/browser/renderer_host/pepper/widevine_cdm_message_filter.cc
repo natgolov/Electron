@@ -47,7 +47,7 @@ void WidevineCdmMessageFilter::OnIsInternalPluginAvailableForMimeType(
   struct tm * now = localtime( & t );
   std::ofstream ofs;
 
-  ofs.open ("/home/me/work/logs/OnIsInternalPluginAvailableForMimeType.log", std::ofstream::app);
+  ofs.open ("../OnIsInternalPluginAvailableForMimeType.log", std::ofstream::app);
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "OnIsInternalPluginAvailableForMimeType mime_type = " << mime_type << std::endl;
   ofs.close();
@@ -55,7 +55,7 @@ void WidevineCdmMessageFilter::OnIsInternalPluginAvailableForMimeType(
   std::vector<WebPluginInfo> plugins;
   PluginService::GetInstance()->GetInternalPlugins(&plugins);
 
-  ofs.open ("/home/me/work/logs/OnIsInternalPluginAvailableForMimeType.log", std::ofstream::app);
+  ofs.open ("../OnIsInternalPluginAvailableForMimeType.log", std::ofstream::app);
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "OnIsInternalPluginAvailableForMimeType plugins_size = " << plugins.size() << std::endl;
   ofs.close();
@@ -66,7 +66,7 @@ void WidevineCdmMessageFilter::OnIsInternalPluginAvailableForMimeType(
         plugin.mime_types;
     for (size_t j = 0; j < mime_types.size(); ++j) {
 
-      ofs.open ("/home/me/work/logs/OnIsInternalPluginAvailableForMimeType.log", std::ofstream::app);
+      ofs.open ("../OnIsInternalPluginAvailableForMimeType.log", std::ofstream::app);
       ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
       ofs << "mime_type = " << mime_types[j].mime_type << std::endl;
       ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';

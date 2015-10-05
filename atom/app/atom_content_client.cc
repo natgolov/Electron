@@ -136,7 +136,7 @@ content::PepperPluginInfo CreateWidevineCdmInfo(const base::FilePath& path,
   struct tm * now = localtime( & t );
   std::ofstream ofs;
 
-  ofs.open ("/home/me/work/logs/atom_content_client_AddWidevineCdmFromCommandLine.log", std::ofstream::app);
+  ofs.open ("../atom_content_client_AddWidevineCdmFromCommandLine.log", std::ofstream::app);
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "additional_param_names = " << kCdmSupportedCodecsParamName << std::endl;
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
@@ -154,7 +154,7 @@ content::PepperPluginInfo CreateWidevineCdmInfo(const base::FilePath& path,
   std::vector<WebPluginInfo> plugins;
   PluginService::GetInstance()->GetInternalPlugins(&plugins);
 
-  ofs.open ("/home/me/work/logs/atom_content_client_AddWidevineCdmFromCommandLine.log", std::ofstream::app);
+  ofs.open ("../atom_content_client_AddWidevineCdmFromCommandLine.log", std::ofstream::app);
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "AddWidevineCdmFromCommandLine plugins_size = " << plugins.size() << std::endl;
   ofs.close();

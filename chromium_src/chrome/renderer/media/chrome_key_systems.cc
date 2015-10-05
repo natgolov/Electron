@@ -46,7 +46,7 @@ static bool IsPepperCdmAvailable(
   struct tm * now = localtime( & t );
   std::ofstream ofs;
 
-  ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_IsPepperCdmAvailable.log", std::ofstream::app);
+  ofs.open ("../electron_ChromeKeySystems_IsPepperCdmAvailable.log", std::ofstream::app);
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "IsPepperCdmAvailable called" << std::endl;
   ofs.close();
@@ -59,7 +59,7 @@ static bool IsPepperCdmAvailable(
           additional_param_names,
           additional_param_values));
 
-  ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_IsPepperCdmAvailable.log", std::ofstream::app);
+  ofs.open ("../electron_ChromeKeySystems_IsPepperCdmAvailable.log", std::ofstream::app);
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "IsPepperCdmAvailable is_available = " << (is_available ? "true" : "false") << std::endl;
   ofs.close();
@@ -109,7 +109,7 @@ static void AddPepperBasedWidevine(
   struct tm * now = localtime( & t );
   std::ofstream ofs;
 
-  ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
+  ofs.open ("../electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "AddPepperBasedWidevine" << std::endl;
   ofs.close();
@@ -129,7 +129,7 @@ static void AddPepperBasedWidevine(
                             &additional_param_values)) {
     DVLOG(1) << "Widevine CDM is not currently available.";
 
-    ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
+    ofs.open ("../electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
     ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
     ofs << "AddPepperBasedWidevine Widevine CDM is not currently available." << std::endl;
     ofs.close();
@@ -191,7 +191,7 @@ static void AddPepperBasedWidevine(
 #endif  // defined(OS_CHROMEOS)
       concrete_key_systems);
 
-ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
+ofs.open ("../electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
     ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
     ofs << "AddPepperBasedWidevine called cdm::AddWidevineWithCodecs" << std::endl;
     ofs.close();

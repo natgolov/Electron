@@ -236,7 +236,7 @@ void AtomRendererClient::AddKeySystems(
   struct tm * now = localtime( & t );
   std::ofstream ofs;
 
-  ofs.open ("/home/me/work/logs/AtomRendererClient.log", std::ofstream::app);
+  ofs.open ("../AtomRendererClient.log", std::ofstream::app);
 
 #if defined(ENABLE_PEPPER_CDMS)
 ofs << "defined(ENABLE_PEPPER_CDMS)" << std::endl;
@@ -262,7 +262,7 @@ ofs << "not defined(WIDEVINE_CDM_AVAILABLE)" << std::endl;
 
   AddChromeKeySystems(key_systems);
 
-  ofs.open ("/home/me/work/logs/AtomRendererClient.log", std::ofstream::app);
+  ofs.open ("../AtomRendererClient.log", std::ofstream::app);
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "AtomRendererClient::AddKeySystems after AddChromeKeySystems" << std::endl;
   ofs.close();

@@ -234,7 +234,7 @@ void PluginInfoMessageFilter::OnIsInternalPluginAvailableForMimeType(
   struct tm * now = localtime( & t );
   std::ofstream ofs;
 
-  ofs.open ("/home/me/work/logs/electron_OnIsInternalPluginAvailableForMimeType.log", std::ofstream::app);
+  ofs.open ("../electron_OnIsInternalPluginAvailableForMimeType.log", std::ofstream::app);
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "Begin OnIsInternalPluginAvailableForMimeType " << std::endl;
   ofs.close();
@@ -242,7 +242,7 @@ void PluginInfoMessageFilter::OnIsInternalPluginAvailableForMimeType(
   std::vector<WebPluginInfo> plugins;
   PluginService::GetInstance()->GetInternalPlugins(&plugins);
 
-  ofs.open ("/home/me/work/logs/electron_OnIsInternalPluginAvailableForMimeType.log", std::ofstream::app);
+  ofs.open ("../electron_OnIsInternalPluginAvailableForMimeType.log", std::ofstream::app);
   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
   ofs << "OnIsInternalPluginAvailableForMimeType plugins_size = " << plugins.size() << std::endl;
   ofs.close();
