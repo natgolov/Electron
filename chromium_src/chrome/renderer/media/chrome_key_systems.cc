@@ -14,7 +14,7 @@
 #include "base/strings/string16.h"
 #include "base/strings/string_split.h"
 #include "base/strings/utf_string_conversions.h"
-#include "atom/common/api/api_messages.h"
+#include "chrome/common/widevine_cdm_messages.h"
 #include "components/cdm/renderer/widevine_key_systems.h"
 #include "content/public/renderer/render_thread.h"
 #include "media/base/eme_constants.h"
@@ -41,6 +41,16 @@ static bool IsPepperCdmAvailable(
     const std::string& pepper_type,
     std::vector<base::string16>* additional_param_names,
     std::vector<base::string16>* additional_param_values) {
+
+  time_t t = time(0);   // get time now
+  struct tm * now = localtime( & t );
+  std::ofstream ofs;
+
+  ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_IsPepperCdmAvailable.log", std::ofstream::app);
+  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+  ofs << "IsPepperCdmAvailable called" << std::endl;
+  ofs.close();
+
   bool is_available = false;
   content::RenderThread::Get()->Send(
       new ChromeViewHostMsg_IsInternalPluginAvailableForMimeType(
@@ -49,6 +59,11 @@ static bool IsPepperCdmAvailable(
           additional_param_names,
           additional_param_values));
 
+  ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_IsPepperCdmAvailable.log", std::ofstream::app);
+  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+  ofs << "IsPepperCdmAvailable is_available = " << (is_available ? "true" : "false") << std::endl;
+  ofs.close();
+
   // is_available = true; 
   // additional_param_names->push_back(
   //     base::ASCIIToUTF16("codecs"));
@@ -56,74 +71,6 @@ static bool IsPepperCdmAvailable(
   //     base::ASCIIToUTF16("vorbis,vp8,vp9.0"));
   
   return is_available;
-}
-
-// External Clear Key (used for testing).
-static void AddExternalClearKey(
-    std::vector<KeySystemInfo>* concrete_key_systems) {
-  static const char kExternalClearKeyKeySystem[] =
-      "org.chromium.externalclearkey";
-  static const char kExternalClearKeyDecryptOnlyKeySystem[] =
-      "org.chromium.externalclearkey.decryptonly";
-  static const char kExternalClearKeyFileIOTestKeySystem[] =
-      "org.chromium.externalclearkey.fileiotest";
-  static const char kExternalClearKeyInitializeFailKeySystem[] =
-      "org.chromium.externalclearkey.initializefail";
-  static const char kExternalClearKeyCrashKeySystem[] =
-      "org.chromium.externalclearkey.crash";
-  static const char kExternalClearKeyPepperType[] =
-      "application/x-ppapi-clearkey-cdm";
-
-  std::vector<base::string16> additional_param_names;
-  std::vector<base::string16> additional_param_values;
-  if (!IsPepperCdmAvailable(kExternalClearKeyPepperType,
-                            &additional_param_names,
-                            &additional_param_values)) {
-    return;
-  }
-
-  KeySystemInfo info;
-  info.key_system = kExternalClearKeyKeySystem;
-
-  info.supported_init_data_types =
-    media::kInitDataTypeMaskWebM | media::kInitDataTypeMaskKeyIds;
-  info.supported_codecs = media::EME_CODEC_WEBM_ALL;
-#if defined(USE_PROPRIETARY_CODECS)
-  info.supported_init_data_types |= media::kInitDataTypeMaskCenc;
-  info.supported_codecs |= media::EME_CODEC_MP4_ALL;
-#endif  // defined(USE_PROPRIETARY_CODECS)
-
-  info.max_audio_robustness = media::EmeRobustness::EMPTY;
-  info.max_video_robustness = media::EmeRobustness::EMPTY;
-
-  // Persistent sessions are faked.
-  info.persistent_license_support = media::EmeSessionTypeSupport::SUPPORTED;
-  info.persistent_release_message_support =
-      media::EmeSessionTypeSupport::NOT_SUPPORTED;
-  info.persistent_state_support = media::EmeFeatureSupport::REQUESTABLE;
-  info.distinctive_identifier_support = media::EmeFeatureSupport::NOT_SUPPORTED;
-
-  info.pepper_type = kExternalClearKeyPepperType;
-
-  concrete_key_systems->push_back(info);
-
-  // Add support of decrypt-only mode in ClearKeyCdm.
-  info.key_system = kExternalClearKeyDecryptOnlyKeySystem;
-  concrete_key_systems->push_back(info);
-
-  // A key system that triggers FileIO test in ClearKeyCdm.
-  info.key_system = kExternalClearKeyFileIOTestKeySystem;
-  concrete_key_systems->push_back(info);
-
-  // A key system that Chrome thinks is supported by ClearKeyCdm, but actually
-  // will be refused by ClearKeyCdm. This is to test the CDM initialization
-  // failure case.
-  info.key_system = kExternalClearKeyInitializeFailKeySystem;
-  concrete_key_systems->push_back(info);
-
-  // A key system that triggers a crash in ClearKeyCdm.
-  info.key_system = kExternalClearKeyCrashKeySystem;
-  concrete_key_systems->push_back(info);
 }
 
 #if defined(WIDEVINE_CDM_AVAILABLE)
@@ -244,6 +191,12 @@ static void AddPepperBasedWidevine(
 #endif  // defined(OS_CHROMEOS)
       concrete_key_systems);
 
+ofs.open ("/home/me/work/logs/electron_ChromeKeySystems_AddPepperBasedWidevine.log", std::ofstream::app);
+    ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+    ofs << "AddPepperBasedWidevine called cdm::AddWidevineWithCodecs" << std::endl;
+    ofs.close();
+    
+
 }
 #endif  // defined(WIDEVINE_CDM_AVAILABLE)
 #endif  // defined(ENABLE_PEPPER_CDMS)
@@ -251,8 +204,6 @@ static void AddPepperBasedWidevine(
 void AddChromeKeySystems(std::vector<KeySystemInfo>* key_systems_info) {
 
 #if defined(ENABLE_PEPPER_CDMS)
-  AddExternalClearKey(key_systems_info);
-
 #if defined(WIDEVINE_CDM_AVAILABLE)
 
   AddPepperBasedWidevine(key_systems_info);

@@ -225,6 +225,7 @@
         'V8_USE_EXTERNAL_STARTUP_DATA',
         'ENABLE_PLUGINS',
         'ENABLE_PEPPER_CDMS',
+        'USE_PROPRIETARY_CODECS',
       ],
       'sources': [
         '<@(lib_sources)',

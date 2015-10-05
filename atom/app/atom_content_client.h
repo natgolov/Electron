@@ -30,12 +30,20 @@ class AtomContentClient : public brightray::ContentClient {
   void AddPepperPlugins(
       std::vector<content::PepperPluginInfo>* plugins) override;
 
-  component_updater::ComponentUpdateService* component_updater();
-  void RegisterComponentsForUpdate();
+// #if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS) && \
+//     defined(WIDEVINE_CDM_IS_COMPONENT)
+//   component_updater::ComponentUpdateService* component_updater();
+//   void RegisterComponentsForUpdate();
+// #endif  // defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS) &&
+//         // defined(WIDEVINE_CDM_IS_COMPONENT)
 
  private:
-  // Initially only for Widevine components.
-  scoped_ptr<component_updater::ComponentUpdateService> component_updater_;
+
+  // #if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS) && \
+  //   defined(WIDEVINE_CDM_IS_COMPONENT)
+  // scoped_ptr<component_updater::ComponentUpdateService> component_updater_;
+  // #endif  // defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS) &&
+  //       // defined(WIDEVINE_CDM_IS_COMPONENT)
 
   DISALLOW_COPY_AND_ASSIGN(AtomContentClient);
 };
