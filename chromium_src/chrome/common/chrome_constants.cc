@@ -8,6 +8,17 @@
 
 #define FPL FILE_PATH_LITERAL
 
+#if defined(OS_MACOSX)
+#define CHROMIUM_PRODUCT_STRING "Electron"
+#if defined(GOOGLE_CHROME_BUILD)
+#define PRODUCT_STRING "Google Chrome"
+#elif defined(CHROMIUM_BUILD)
+#define PRODUCT_STRING "Electron"
+#else
+#error Unknown branding
+#endif
+#endif  // defined(OS_MACOSX)
+
 namespace chrome {
 
 #if defined(OS_WIN)
