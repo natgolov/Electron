@@ -478,6 +478,16 @@
               ],
             },
             {
+              'postbuild_name': 'Fix path of libwidevinecdm',
+              'action': [
+                'install_name_tool',
+                '-change',
+                '@loader_path/libwidevinecdm.dylib',
+                '@rpath/libwidevinecdm.dylib',
+                '${BUILT_PRODUCTS_DIR}/<(product_name) Framework.framework/Versions/A/<(product_name) Framework',
+              ],
+            },
+            {
               'postbuild_name': 'Add symlinks for framework subdirectories',
               'action': [
                 'tools/mac/create-framework-subdir-symlinks.sh',
