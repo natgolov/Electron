@@ -41,19 +41,6 @@ using content::WebPluginInfo;
 // #include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
 #include "third_party/widevine/cdm/stub/widevine_cdm_version.h"
 
-  time_t t = time(0);   // get time now
-  struct tm * now = localtime( & t );
-  std::ofstream ofs;
-
-  ofs.open ("../atom_content_client.log", std::ofstream::app);
-  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
-#if defined(WIDEVINE_CDM_AVAILABLE) 
-  ofs << "WIDEVINE_CDM_AVAILABLE " << std::endl;
-#else
-  ofs << "NOT WIDEVINE_CDM_AVAILABLE " << std::endl;
-#endif
-  ofs.close();
-
 // The following must be after widevine_cdm_version.h.
 #if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS) && \
     !defined(WIDEVINE_CDM_IS_COMPONENT)
@@ -300,6 +287,19 @@ void AtomContentClient::AddAdditionalSchemes(
 
 void AtomContentClient::AddPepperPlugins(
     std::vector<content::PepperPluginInfo>* plugins) {
+
+  time_t t = time(0);   // get time now
+  struct tm * now = localtime( & t );
+  std::ofstream ofs;
+
+  ofs.open ("../atom_content_client.log", std::ofstream::app);
+  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+#if defined(WIDEVINE_CDM_AVAILABLE) 
+  ofs << "WIDEVINE_CDM_AVAILABLE " << std::endl;
+#else
+  ofs << "NOT WIDEVINE_CDM_AVAILABLE " << std::endl;
+#endif
+  ofs.close();
 
  // not done yet 
  // RegisterComponentsForUpdate();
