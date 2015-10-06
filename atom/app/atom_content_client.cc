@@ -41,6 +41,19 @@ using content::WebPluginInfo;
 // #include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
 #include "third_party/widevine/cdm/stub/widevine_cdm_version.h"
 
+  time_t t = time(0);   // get time now
+  struct tm * now = localtime( & t );
+  std::ofstream ofs;
+
+  ofs.open ("../atom_content_client.log", std::ofstream::app);
+  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+#if defined(WIDEVINE_CDM_AVAILABLE) 
+  ofs << "WIDEVINE_CDM_AVAILABLE " << std::endl;
+#else
+  ofs << "NOT WIDEVINE_CDM_AVAILABLE " << std::endl;
+#endif
+  ofs.close();
+
 // The following must be after widevine_cdm_version.h.
 #if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS) && \
     !defined(WIDEVINE_CDM_IS_COMPONENT)
@@ -143,21 +156,21 @@ content::PepperPluginInfo CreateWidevineCdmInfo(const base::FilePath& path,
   ofs << "additional_param_values = " << codec_string << std::endl;
   ofs.close();
 
-  // true = Add to beginning of list to override any existing registrations.
-  PluginService::GetInstance()->RegisterInternalPlugin(
-      widevine_cdm.ToWebPluginInfo(), true);
-   // Tell the browser to refresh the plugin list. Then tell all renderers to
-   // update their plugin list caches.
-  PluginService::GetInstance()->RefreshPlugins();
-  PluginService::GetInstance()->PurgePluginListCache(NULL, false);
+  // // true = Add to beginning of list to override any existing registrations.
+  // PluginService::GetInstance()->RegisterInternalPlugin(
+  //     widevine_cdm.ToWebPluginInfo(), true);
+  //  // Tell the browser to refresh the plugin list. Then tell all renderers to
+  //  // update their plugin list caches.
+  // PluginService::GetInstance()->RefreshPlugins();
+  // PluginService::GetInstance()->PurgePluginListCache(NULL, false);
 
-  std::vector<WebPluginInfo> plugins;
-  PluginService::GetInstance()->GetInternalPlugins(&plugins);
+  // std::vector<WebPluginInfo> plugins;
+  // PluginService::GetInstance()->GetInternalPlugins(&plugins);
 
-  ofs.open ("../atom_content_client_AddWidevineCdmFromCommandLine.log", std::ofstream::app);
-  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
-  ofs << "AddWidevineCdmFromCommandLine plugins_size = " << plugins.size() << std::endl;
-  ofs.close();
+  // ofs.open ("../atom_content_client_AddWidevineCdmFromCommandLine.log", std::ofstream::app);
+  // ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+  // ofs << "AddWidevineCdmFromCommandLine plugins_size = " << plugins.size() << std::endl;
+  // ofs.close();
 
   return widevine_cdm;
 }
