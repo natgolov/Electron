@@ -1,6 +1,8 @@
 // Copyright (c) 2013 GitHub, Inc.
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
+#include <fstream>
+#include <ctime>
 
 #include "atom/app/atom_main_delegate.h"
 
@@ -15,10 +17,67 @@
 #include "base/debug/stack_trace.h"
 #include "base/environment.h"
 #include "base/logging.h"
+// #include "base/mac/foundation_util.h"
+// #include "base/path_service.h"
+// #include "chrome/common/chrome_paths.h"
+// #include "chrome/common/widevine_cdm_constants.h"
 #include "content/public/common/content_switches.h"
 #include "ui/base/resource/resource_bundle.h"
 
+// #include "widevine_cdm_version.h"  // In SHARED_INTERMEDIATE_DIR.
+#include "third_party/widevine/cdm/stub/widevine_cdm_version.h"
+
 namespace atom {
+
+// namespace {
+
+// base::FilePath GetUserDataPath() {
+  
+//   base::FilePath result;
+//   if (PathService::Get(base::DIR_TEMP, &result))
+
+//   {
+//     time_t t = time(0);   // get time now
+//     struct tm * now = localtime( & t );
+//     std::ofstream ofs;
+
+//     ofs.open ("../atom_main_delegate_PATH.log", std::ofstream::app);
+//     ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+//     ofs << "GetUserDataPath = " << result.value() << std::endl;
+//     ofs.close();
+
+//     return result;    
+//   }
+
+
+//   NOTREACHED();
+//   return result;
+// }
+
+// base::FilePath GetFrameworksPath() {
+//   // Start out with the path to the running executable.
+//   base::FilePath execPath;
+//   PathService::Get(base::FILE_EXE, &execPath);
+
+//   // Get the main bundle path.
+//   base::FilePath bundlePath = base::mac::GetAppBundlePath(execPath);
+
+//   // Go into the Contents/Frameworks directory.
+//   return bundlePath.Append(FILE_PATH_LITERAL("Contents"))
+//                    .Append(FILE_PATH_LITERAL("Frameworks"));
+// }
+
+// // The framework bundle path is used for loading resources, libraries, etc.
+// base::FilePath GetFrameworkBundlePath() {
+//   return GetFrameworksPath().Append(
+//       FILE_PATH_LITERAL("Chromium Embedded Framework.framework"));
+// }
+
+// base::FilePath GetResourcesFilePath() {
+//   return GetFrameworkBundlePath().Append(FILE_PATH_LITERAL("Resources"));
+// }
+
+// }   // namespace
 
 AtomMainDelegate::AtomMainDelegate() {
 }
@@ -89,6 +148,35 @@ void AtomMainDelegate::PreSandboxStartup() {
   // Enable AVFoundation.
   command_line->AppendSwitch("enable-avfoundation");
 #endif
+
+// #if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS)
+//   const base::FilePath& user_data_path = GetUserDataPath();
+//   PathService::Override(chrome::DIR_USER_DATA, user_data_path);
+//   const base::FilePath& widevine_plugin_path = GetResourcesFilePath();
+//   PathService::Override(chrome::FILE_WIDEVINE_CDM_ADAPTER,
+//                         widevine_plugin_path.AppendASCII(
+//                             kWidevineCdmAdapterFileName));
+// #if defined(WIDEVINE_CDM_IS_COMPONENT)
+//   PathService::Override(chrome::DIR_COMPONENT_WIDEVINE_CDM,
+//                         user_data_path.Append(kWidevineCdmBaseDirectory));
+
+//   time_t t = time(0);   // get time now
+//   struct tm * now = localtime( & t );
+//   std::ofstream ofs;
+
+//   ofs.open ("../atom_main_delegate_PATH.log", std::ofstream::app);
+//   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+//   ofs << "chrome::FILE_WIDEVINE_CDM_ADAPTER = " << chrome::FILE_WIDEVINE_CDM_ADAPTER << std::endl;
+//   ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+//   ofs << "chrome::DIR_COMPONENT_WIDEVINE_CDM = " << chrome::DIR_COMPONENT_WIDEVINE_CDM << std::endl;
+//   ofs.close();
+
+
+// #endif  // defined(WIDEVINE_CDM_IS_COMPONENT)
+// #endif  // defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS)
+
+
+
 }
 
 content::ContentBrowserClient* AtomMainDelegate::CreateContentBrowserClient() {
