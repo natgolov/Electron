@@ -13,6 +13,10 @@
 #include "brightray/browser/browser_main_parts.h"
 #include "content/public/browser/browser_context.h"
 
+namespace component_updater {
+class ComponentUpdateService;
+}
+
 class BrowserProcess;
 
 namespace atom {
@@ -50,6 +54,8 @@ class AtomBrowserMainParts : public brightray::BrowserMainParts {
 #if defined(USE_X11)
   void SetDPIFromGSettings();
 #endif
+  component_updater::ComponentUpdateService* component_updater();
+  void RegisterComponentsForUpdate();
 
   // A fake BrowserProcess object that used to feed the source code from chrome.
   scoped_ptr<BrowserProcess> fake_browser_process_;
@@ -63,6 +69,7 @@ class AtomBrowserMainParts : public brightray::BrowserMainParts {
   scoped_ptr<NodeBindings> node_bindings_;
   scoped_ptr<AtomBindings> atom_bindings_;
   scoped_ptr<NodeDebugger> node_debugger_;
+  scoped_ptr<component_updater::ComponentUpdateService> component_updater_;
 
   base::Timer gc_timer_;
 

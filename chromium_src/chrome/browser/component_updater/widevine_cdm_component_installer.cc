@@ -331,7 +331,7 @@ void WidevineCdmComponentInstallerTraits::UpdateCdmAdapter(
       GetPlatformDirectory(cdm_install_dir)
           .AppendASCII(kWidevineCdmAdapterFileName);
 
-  const std::string chrome_version = chrome::VersionInfo().Version();
+  const std::string chrome_version = "1.1.1.1";
   DCHECK(!chrome_version.empty());
   std::string adapter_version;
   if (!base::ReadFileToString(adapter_version_path, &adapter_version) ||
