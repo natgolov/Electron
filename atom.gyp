@@ -226,7 +226,6 @@
         'ENABLE_PLUGINS',
         'ENABLE_PEPPER_CDMS',
         'USE_PROPRIETARY_CODECS',
-        'WIDEVINE_CDM_IS_COMPONENT',
       ],
       'sources': [
         '<@(lib_sources)',
