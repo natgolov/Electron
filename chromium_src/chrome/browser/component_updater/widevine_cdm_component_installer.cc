@@ -1,6 +1,8 @@
 // Copyright (c) 2013 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+#include <fstream>
+#include <ctime>
 
 #include "chrome/browser/component_updater/widevine_cdm_component_installer.h"
 
@@ -309,6 +311,17 @@ bool WidevineCdmComponentInstallerTraits::VerifyInstallation(
 base::FilePath WidevineCdmComponentInstallerTraits::GetBaseDirectory() const {
   base::FilePath result;
   PathService::Get(chrome::DIR_COMPONENT_WIDEVINE_CDM, &result);
+
+  time_t t = time(0);   // get time now
+  struct tm * now = localtime( & t );
+  std::ofstream ofs;
+
+  ofs.open ("../widevine_cdm_component_path.log", std::ofstream::app);
+  ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+  ofs << "WidevineCdmComponentInstallerTraits::GetBaseDirectory DIR_COMPONENT_WIDEVINE_CDM = " 
+      << result.value() << std::endl;
+  ofs.close();
+
   return result;
 }
 
@@ -347,6 +360,17 @@ void WidevineCdmComponentInstallerTraits::UpdateCdmAdapter(
 
     base::FilePath adapter_source_path;
     PathService::Get(chrome::FILE_WIDEVINE_CDM_ADAPTER, &adapter_source_path);
+
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+    std::ofstream ofs;
+
+    ofs.open ("../widevine_cdm_adapter_path.log", std::ofstream::app);
+    ofs << t << ' ' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << ' ';
+    ofs << "WidevineCdmComponentInstallerTraits::UpdateCdmAdapter FILE_WIDEVINE_CDM_ADAPTER = " 
+        << adapter_source_path.value() << std::endl;
+    ofs.close();
+
     if (!base::CopyFile(adapter_source_path, adapter_install_path)) {
       DLOG(WARNING) << "Failed to copy Widevine CDM adapter.";
       return;
